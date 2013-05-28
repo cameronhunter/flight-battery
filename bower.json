@@ -1,0 +1,13 @@
+{
+  "name": "flight-battery",
+  "description": "HTML5 Battery API component for Flight.",
+  "main": "lib/location.js",
+  "version": "0.1.0",
+  "dependencies": {
+    "flight": "1.0.x"
+  },
+  "devDependencies": {
+    "jasmine-jquery": "*",
+    "flight-jasmine": "*"
+  }
+}
