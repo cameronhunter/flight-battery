@@ -1,7 +1,7 @@
 {
   "name": "flight-battery",
   "description": "HTML5 Battery API component for Flight.",
-  "main": "lib/location.js",
+  "main": "lib/battery.js",
   "version": "0.1.0",
   "dependencies": {
     "flight": "1.0.x"
