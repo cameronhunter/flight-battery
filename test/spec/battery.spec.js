@@ -1,58 +1,68 @@
 describeComponent('lib/battery', function () {
 
-  var lowBattery = {
-    level: 0.05,
-    charging: false
-  };
+  describe('when charging', function() {
+    beforeEach(function() {
+      setBatteryStatus({
+        level: 0.75,
+        dischargingTime: Infinity,
+        charging: true
+      });
+      setupComponent();
+    });
 
-  var charging = {
-    level: 0.75,
-    dischargingTime: Infinity,
-    charging: true
-  };
+    it('should trigger "battery-status" on battery level changes', function() {
+      var eventSpy = spyOnEvent(document, 'battery-status');
+      this.component.trigger(this.component.battery, 'levelchange');
+      expect(eventSpy).toHaveBeenTriggeredOn(document);
+    });
 
-  var discharging = {
-    level: 0.75,
-    charging: false
-  };
-
-  beforeEach(function() {
-    if (!window.navigator || !window.navigator.battery) {
-      window.navigator = {};
-      window.navigator.battery = charging;
-    }
-
-    setupComponent(document, {
-      lowLevel: 10
+    it('should trigger "battery-charging" when charging', function() {
+      var eventSpy = spyOnEvent(document, 'battery-charging');
+      this.component.trigger(this.component.battery, 'chargingchange');
+      expect(eventSpy).toHaveBeenTriggeredOn(document);
     });
   });
 
-  it('should trigger "battery-status" on battery level changes', function() {
-    spyOn(navigator.battery).andReturn(discharging);
-    var eventSpy = spyOnEvent(document, 'battery-status');
-    $(document).trigger('levelchange');
-    expect(eventSpy).toHaveBeenTriggeredOn(document);
+  describe('when in low battery mode', function() {
+    beforeEach(function() {
+      setBatteryStatus({
+        level: 0.05,
+        charging: false
+      });
+      setupComponent();
+    });
+
+    it('should trigger "battery-status-low" when battery drops below 10%', function() {
+      var eventSpy = spyOnEvent(document, 'battery-status-low');
+      this.component.trigger(this.component.battery, 'levelchange');
+      expect(eventSpy).toHaveBeenTriggeredOn(document);
+    });
   });
 
-  it('should trigger "battery-status-low" when battery drops below 10%', function() {
-    navigator.battery = lowBattery;
-    var eventSpy = spyOnEvent(document, 'battery-status-low');
-    $(document).trigger('levelchange');
-    expect(eventSpy).toHaveBeenTriggeredOn(document);
+  describe('when discharging', function() {
+    beforeEach(function() {
+      setBatteryStatus({
+        level: 0.75,
+        charging: false
+      });
+      setupComponent();
+    });
+
+    it('should trigger "battery-discharging" when discharging', function() {
+      var eventSpy = spyOnEvent(document, 'battery-discharging');
+      this.component.trigger(this.component.battery, 'chargingchange');
+      expect(eventSpy).toHaveBeenTriggeredOn(document);
+    });
   });
 
-  it('should trigger "battery-charging" when charging', function() {
-    navigator.battery = charging;
-    var eventSpy = spyOnEvent(document, 'battery-charging');
-    $(document).trigger('chargingchange');
-    expect(eventSpy).toHaveBeenTriggeredOn(document);
-  });
-
-  it('should trigger "battery-discharging" when discharging', function() {
-    navigator.battery = discharging;
-    var eventSpy = spyOnEvent(document, 'battery-discharging');
-    $(document).trigger('chargingchange');
-    expect(eventSpy).toHaveBeenTriggeredOn(document);
-  });
+  function setBatteryStatus(status) {
+    delete navigator.battery;
+    navigator.battery = $.extend({}, {
+      level: 0.75,
+      chargingTime: Infinity,
+      dischargingTime: Infinity,
+      charging: true
+    }, status);
+  }
 
 });
