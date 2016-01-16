@@ -1,4 +1,6 @@
-# flight-battery [![Build Status](https://secure.travis-ci.org/cameronhunter/flight-battery.png)](http://travis-ci.org/cameronhunter/flight-battery)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/) [![Build Status](https://secure.travis-ci.org/cameronhunter/flight-battery.svg)](http://travis-ci.org/cameronhunter/flight-battery)
+
+# flight-battery
 
 A [Flight](https://github.com/twitter/flight) component making use of the [HTML5 Battery API](https://developer.mozilla.org/en-US/docs/WebAPI/Battery_Status).
 
